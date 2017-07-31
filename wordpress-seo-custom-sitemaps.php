@@ -24,7 +24,7 @@ if ( ! defined( 'WP_SEO_CUSTOM_SITEMAPS' ) ) {
 
 // Includes the main plugin class.
 if ( ! class_exists( 'WP_SEO_Custom_Sitemaps' ) ) {
-	include_once dirname( __FILE__ ) . '/inc/class-wp-seo-custom-sitemaps.php';
+	include_once dirname( __FILE__ ) . '/inc/class-wpseo-custom-sitemaps.php';
 }
 
 /**

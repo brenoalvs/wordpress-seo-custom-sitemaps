@@ -58,7 +58,7 @@ final class WP_SEO_Custom_Sitemaps {
 	 */
 	public function load_provider( $providers ) {
 		// Requires custom sitemaps provider file.
-		require_once 'class-custom-sitemap-provider.php';
+		require_once 'class-wpseo-custom-sitemap-provider.php';
 
 		$providers[] = new WPSEO_Custom_Sitemap_Provider();
 

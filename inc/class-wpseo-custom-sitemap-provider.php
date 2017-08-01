@@ -58,15 +58,26 @@ if ( ! class_exists( 'WPSEO_Custom_Sitemap_Provider' ) ) {
 		 * @return array
 		 */
 		public function get_sitemap_links( $type, $max_entries, $current_page ) {
-			// Array feed by settings.
-			return array(
-				array(
-					'loc' => 'http://wordpress.dev/custom-link',
-					'mod' => date( DATE_W3C, time() ),
-					'chf' => 'daily',
-					'pri' => 1,
-				),
-			);
+			$sitemap_links = array();
+			$sitemap_page  = Proxio()->get_option( 'sitemap_page' );
+			$content       = apply_filters( 'the_content', get_post_field( 'post_content', $sitemap_page ) );
+			$dom           = new DOMDocument();
+
+			libxml_use_internal_errors( true );
+			$html = $dom->loadHTML( $content, LIBXML_NOERROR | LIBXML_ERR_NONE );
+			libxml_clear_errors();
+
+			if ( $html ) {
+				$links = $dom->getElementsByTagName( 'a' );
+
+				foreach ( $links as $link ) {
+					$sitemap_links[] = array(
+						'loc' => esc_url( $link->getAttribute( 'href' ) ),
+					);
+				}
+			}
+
+			return $sitemap_links;
 		}
 	}
 }

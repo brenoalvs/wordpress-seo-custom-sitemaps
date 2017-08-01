@@ -58,10 +58,14 @@ if ( ! class_exists( 'WPSEO_Custom_Sitemap_Provider' ) ) {
 		 * @return array
 		 */
 		public function get_sitemap_links( $type, $max_entries, $current_page ) {
-			$sitemap_page = Proxio()->get_option( 'sitemap_page' );
-			$content      = apply_filters( 'the_content', get_post_field( 'post_content', $sitemap_page ) );
-			$dom          = new DOMDocument();
-			$html         = $dom->loadHTML( $content, LIBXML_NOERROR );
+			$sitemap_links = array();
+			$sitemap_page  = Proxio()->get_option( 'sitemap_page' );
+			$content       = apply_filters( 'the_content', get_post_field( 'post_content', $sitemap_page ) );
+			$dom           = new DOMDocument();
+
+			libxml_use_internal_errors( true );
+			$html = $dom->loadHTML( $content, LIBXML_NOERROR | LIBXML_ERR_NONE );
+			libxml_clear_errors();
 
 			if ( $html ) {
 				$links = $dom->getElementsByTagName( 'a' );

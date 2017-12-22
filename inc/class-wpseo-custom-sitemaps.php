@@ -74,7 +74,7 @@ final class WP_SEO_Custom_Sitemaps {
 		require_once 'class-wpseo-custom-sitemap-provider.php';
 
 		// Abstract class for entities sitemaps.
-		require_once 'class-proxio-entity-sitemap-provider.php';
+		require_once 'abstract-class-proxio-entity-sitemap-provider.php';
 
 		// Entities sitemaps.
 		require_once 'class-proxio-property-sitemap-provider.php';

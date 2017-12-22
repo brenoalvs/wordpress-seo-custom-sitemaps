@@ -26,7 +26,7 @@ if ( ! class_exists( 'WPSEO_Custom_Sitemap_Provider' ) ) {
 		 * @return boolean
 		 */
 		public function handles_type( $type ) {
-			return 'custom' === $type;
+			return 'general' === $type;
 		}
 
 		public function get_entries( $current_page = '', $max_entries = '' ) {
@@ -110,7 +110,7 @@ if ( ! class_exists( 'WPSEO_Custom_Sitemap_Provider' ) ) {
 				$page = 0 === $key ? '' : $key + 1;
 
 				$index[] = array(
-					'loc'     => WPSEO_Sitemaps_Router::get_base_url( 'custom-sitemap' . $page . '.xml' ),
+					'loc'     => WPSEO_Sitemaps_Router::get_base_url( 'general-sitemap' . $page . '.xml' ),
 					'lastmod' => '@' . time(), // @ for explicit timestamp format
 				);
 			}

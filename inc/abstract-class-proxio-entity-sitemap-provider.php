@@ -71,33 +71,71 @@ if ( ! class_exists( 'Proxio_Entity_Sitemap_Provider' ) ) {
 			file_put_contents( $filepath, fopen( $download_url, 'r' ) );
 		}
 
-		private function get_entries( $current_page = '', $max_entries = '' ) {
+		/**
+		 * Get entries from sitemap file.
+		 *
+		 * Open downloaded csv file and read line by line avoiding memory leak issues.
+		 *
+		 * @param  int $current_page Current page of the sitemap.
+		 * @param  int $max_entries  Entries per sitemap.
+		 * @return array             List of entries.
+		 */
+		private function get_entries( $current_page = 1, $max_entries ) {
 			$sitemap_links = array();
 			$uploads_dir   = wp_upload_dir();
 			$filepath      = trailingslashit( $uploads_dir['basedir'] ) . $this->entity . '.csv';
 
 			if ( file_exists( $filepath ) ) {
-				$file = file( $filepath );
+				$handle    = fopen( $filepath, 'r' );
+				$skip      = $max_entries * $current_page - $max_entries;
+				$take      = $max_entries;
+				$skipcount = 0;
+				$linecount = 0;
 
-				if ( ! empty( $current_page ) && ! empty( $max_entries ) ) {
-					for ( $counter = $current_page * $max_entries - $max_entries; $counter < $max_entries * $current_page; $counter++ ) {
-						if ( isset( $file[ $counter ] ) ) {
-							$base_url = trailingslashit( get_permalink( get_proxio_page_id( $this->page_id ) ) );
-							$slug     = $file[ $counter ];
-
-							$sitemap_links[] = array(
-								'loc' => $base_url . $slug,
-							);
-						} else {
-							break;
-						}
+				if ( 0 < $skip ) {
+					while ( ! feof( $handle ) && $skipcount < $skip ) {
+						$line = fgets( $handle );
+						$skipcount++;
 					}
-				} else {
-					$sitemap_links = $file;
 				}
+
+				while ( ! feof( $handle ) ) {
+					if ( $linecount >= $take ) {
+						break;
+					}
+
+					$line     = fgets( $handle );
+					$slug     = rtrim( $line );
+					$base_url = trailingslashit( get_permalink( get_proxio_page_id( $this->page_id ) ) );
+
+					$sitemap_links[] = array(
+						'loc' => $base_url . $slug,
+					);
+
+					$linecount++;
+				}
+
+				fclose( $handle );
 			}
 
 			return $sitemap_links;
+		}
+
+		private function get_entries_count() {
+			$count       = 0;
+			$uploads_dir = wp_upload_dir();
+			$filepath    = trailingslashit( $uploads_dir['basedir'] ) . $this->entity . '.csv';
+
+			$handle = fopen( $filepath, 'r' );
+
+			while ( ! feof( $handle ) ) {
+				$line = fgets( $handle );
+				$count++;
+			}
+
+			fclose( $handle );
+
+			return $count;
 		}
 
 		/**
@@ -120,14 +158,14 @@ if ( ! class_exists( 'Proxio_Entity_Sitemap_Provider' ) ) {
 		 */
 		public function get_index_links( $max_entries ) {
 			$index         = array();
-			$entries       = $this->get_entries();
-			$entries_pages = array_chunk( $entries, $max_entries );
+			$entries       = $this->get_entries_count();
+			$entries_pages = round( $entries / $max_entries );
 
-			foreach ( $entries_pages as $key => $page ) {
-				$page = 0 === $key ? '' : $key + 1;
+			for ( $page = 0; $page < $entries_pages; $page++ ) {
+				$key = 0 === $page ? '' : $page + 1;
 
 				$index[] = array(
-					'loc'     => WPSEO_Sitemaps_Router::get_base_url( $this->entity . '-sitemap' . $page . '.xml' ),
+					'loc'     => WPSEO_Sitemaps_Router::get_base_url( $this->entity . '-sitemap' . $key . '.xml' ),
 					'lastmod' => '@' . time(), // @ for explicit timestamp format
 				);
 			}

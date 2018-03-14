@@ -72,11 +72,13 @@ if ( ! class_exists( 'WPSEO_Custom_Sitemap_Provider' ) ) {
 					$entity   = substr( $parts[1], 0, strpos( $parts[1], '_' ) );
 					$base_url = trailingslashit( get_permalink( $entities[ $entity ] ) . $parts[0] );
 
-					foreach ( $content as $location ) {
-						if ( isset( $location->value ) ) {
-							$sitemap_links[] = array(
-								'loc' => trailingslashit( $base_url . $location->value ),
-							);
+					if ( ! empty( $content ) ) {
+						foreach ( $content as $location ) {
+							if ( isset( $location->value ) ) {
+								$sitemap_links[] = array(
+									'loc' => trailingslashit( $base_url . $location->value ),
+								);
+							}
 						}
 					}
 				}

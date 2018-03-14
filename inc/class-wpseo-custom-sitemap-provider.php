@@ -59,6 +59,10 @@ if ( ! class_exists( 'WPSEO_Custom_Sitemap_Provider' ) ) {
 			$uploads  = wp_upload_dir();
 			$jsons    = glob( $uploads['basedir'] . '/json/*_en.json' );
 
+			if ( empty( $jsons ) ) {
+				$jsons = glob( $uploads['basedir'] . '/json/*.json' );
+			}
+
 			foreach ( $jsons as $json ) {
 				$filename = substr( basename( $json ), 0, strpos( basename( $json ), '.json' ) );
 				$content  = json_decode( file_get_contents( $json ) );

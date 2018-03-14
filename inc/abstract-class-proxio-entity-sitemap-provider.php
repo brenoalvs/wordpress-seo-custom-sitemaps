@@ -67,8 +67,12 @@ if ( ! class_exists( 'Proxio_Entity_Sitemap_Provider' ) ) {
 			$api_key      = Proxio()->get_option( 'api_key' );
 
 			$download_url = add_query_arg( 'api_key', $api_key, untrailingslashit( $api_url ) . $this->endpoint );
+			$download     = download_url( $download_url, 300 );
 
-			file_put_contents( $filepath, fopen( $download_url, 'r' ) );
+			if ( ! is_wp_error( $download ) ) {
+				copy( $download, $filepath );
+				@unlink( $download );
+			}
 		}
 
 		/**

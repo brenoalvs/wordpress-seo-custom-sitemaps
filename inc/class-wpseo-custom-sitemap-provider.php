@@ -69,7 +69,8 @@ if ( ! class_exists( 'WPSEO_Custom_Sitemap_Provider' ) ) {
 				$parts    = explode( '-', $filename );
 
 				if ( isset( $parts[1] ) ) {
-					$base_url = trailingslashit( get_permalink( $entities[ $parts[1] ] ) . $parts[0] );
+					$entity   = substr( $parts[1], 0, strpos( $parts[1], '_' ) );
+					$base_url = trailingslashit( get_permalink( $entities[ $entity ] ) . $parts[0] );
 
 					foreach ( $content as $location ) {
 						if ( isset( $location->value ) ) {

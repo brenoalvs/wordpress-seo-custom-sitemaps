@@ -57,7 +57,7 @@ if ( ! class_exists( 'WPSEO_Custom_Sitemap_Provider' ) ) {
 			);
 
 			$uploads  = wp_upload_dir();
-			$jsons    = glob( $uploads['basedir'] . '/json/*.json' );
+			$jsons    = glob( $uploads['basedir'] . '/json/*_en.json' );
 
 			foreach ( $jsons as $json ) {
 				$filename = substr( basename( $json ), 0, strpos( basename( $json ), '.json' ) );

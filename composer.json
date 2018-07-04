@@ -1,12 +1,22 @@
 {
-    "name": "brenoalvs/wordpress-seo-custom-sitemaps",
-    "description": "Custom sitemaps extesion for Yoast SEO",
-    "type": "wordpress-plugin",
-    "license": "GPL-3.0+",
-    "authors": [
-        {
-            "name": "Breno Alves",
-            "email": "breno.alvs@hotmail.com"
-        }
-    ]
+  "name": "proxio/proxio-sitemaps",
+  "type": "wordpress-plugin",
+  "license": "EULA",
+  "description": "Plugin for Proxio Sitemaps",
+  "homepage": "https://github.com/socialkandy/proxio-sitemaps",
+  "authors": [
+    {
+      "name": "Proxio, Inc.",
+      "email": "b.alves@proxio.com"
+    }
+  ],
+  "keywords": [
+    "proxio", "proxio-sitemaps"
+  ],
+  "support": {
+    "issues": "https://github.com/socialkandy/proxio-sitemaps/issues"
+  },
+  "require": {
+    "php": ">=5.4",
+  }
 }

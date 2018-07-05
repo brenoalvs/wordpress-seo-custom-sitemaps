@@ -17,6 +17,6 @@
     "issues": "https://github.com/socialkandy/proxio-sitemaps/issues"
   },
   "require": {
-    "php": ">=5.4",
+    "php": ">=5.4"
   }
 }

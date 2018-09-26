@@ -51,6 +51,9 @@ final class WP_SEO_Custom_Sitemaps {
 
 		add_filter( 'wpseo_sitemaps_providers', array( $this, 'load_provider' ) );
 		add_action( 'plugins_loaded', array( $this, 'custom_sitemap_xls' ), 20 );
+
+		add_filter( 'wpseo_typecount_join', array( $this, 'remove_translations_from_sitemap' ) );
+		add_filter( 'wpseo_posts_join', array( $this, 'remove_translations_from_sitemap' ) );
 	}
 
 	public function activation() {
@@ -101,6 +104,25 @@ final class WP_SEO_Custom_Sitemaps {
 			$stylesheet_url = plugin_dir_url( WP_SEO_CUSTOM_SITEMAPS ) . 'inc/main-sitemap.xsl';
 			$wpseo_sitemaps->renderer->set_stylesheet( '<?xml-stylesheet type="text/xsl" href="' . esc_url( $stylesheet_url ) . '"?>' );
 		}
+	}
+
+	/**
+	 * Removes translations posts from queries for sitemaps.
+	 *
+	 * Used to generate sitemaps only with default language.
+	 *
+	 * @param  string $join JOIN clause for fetch all posts, empty by default.
+	 * @return string       JOIN clause for fetch only default language posts.
+	 */
+	public function remove_translations_from_sitemap( $join ) {
+		global $wpdb;
+
+		$language = proxio_get_language_code();
+
+		return "INNER JOIN {$wpdb->prefix}icl_translations
+			ON wp_posts.ID = {$wpdb->prefix}icl_translations.element_id
+			AND {$wpdb->prefix}icl_translations.language_code = '{$language}'
+		";
 	}
 }
 

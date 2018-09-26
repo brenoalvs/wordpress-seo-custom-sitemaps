@@ -163,7 +163,7 @@ if ( ! class_exists( 'Proxio_Entity_Sitemap_Provider' ) ) {
 		public function get_index_links( $max_entries ) {
 			$index         = array();
 			$entries       = $this->get_entries_count();
-			$entries_pages = round( $entries / $max_entries );
+			$entries_pages = ceil( $entries / $max_entries );
 
 			for ( $page = 0; $page < $entries_pages; $page++ ) {
 				$key = 0 === $page ? '' : $page + 1;

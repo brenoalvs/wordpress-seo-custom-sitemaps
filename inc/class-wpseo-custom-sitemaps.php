@@ -50,7 +50,7 @@ final class WP_SEO_Custom_Sitemaps {
 		register_deactivation_hook( WP_SEO_CUSTOM_SITEMAPS, array( $this, 'deactivation' ) );
 
 		add_filter( 'wpseo_sitemaps_providers', array( $this, 'load_provider' ) );
-		add_action( 'wpseo_xmlsitemaps_config', array( $this, 'register_admin_fields' ) );
+		add_action( 'plugins_loaded', array( $this, 'custom_sitemap_xls' ), 20 );
 	}
 
 	public function activation() {
@@ -94,8 +94,13 @@ final class WP_SEO_Custom_Sitemaps {
 	/**
 	 * Registers admin fields to save custom sitemap entries.
 	 */
-	public function register_admin_fields() {
-		// Add settings fields.
+	public function custom_sitemap_xls() {
+		global $wpseo_sitemaps;
+
+		if ( is_a( $wpseo_sitemaps, 'WPSEO_Sitemaps' ) ) {
+			$stylesheet_url = plugin_dir_url( WP_SEO_CUSTOM_SITEMAPS ) . 'inc/main-sitemap.xsl';
+			$wpseo_sitemaps->renderer->set_stylesheet( '<?xml-stylesheet type="text/xsl" href="' . esc_url( $stylesheet_url ) . '"?>' );
+		}
 	}
 }
 

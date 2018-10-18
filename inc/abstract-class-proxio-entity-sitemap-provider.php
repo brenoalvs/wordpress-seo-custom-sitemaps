@@ -113,7 +113,7 @@ if ( ! class_exists( 'Proxio_Entity_Sitemap_Provider' ) ) {
 					$base_url = trailingslashit( get_permalink( get_proxio_page_id( $this->page_id ) ) );
 
 					$sitemap_links[] = array(
-						'loc' => $base_url . $slug,
+						'loc' => trailingslashit( $base_url . $slug ),
 					);
 
 					$linecount++;

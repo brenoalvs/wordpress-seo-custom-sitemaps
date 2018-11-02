@@ -94,10 +94,16 @@ if ( ! class_exists( 'WPSEO_Custom_Sitemap_Provider' ) ) {
 						break;
 					}
 				}
-
 				$sitemap_links = $page_links;
 			}
-
+			/**
+			 * Proxio Sitemaps Links
+			 *
+			 * Filters values from get entries call.
+			 *
+			 * @since 0.1.0
+			 */
+			$sitemap_links = apply_filters( 'proxio_sitemaps_links', $sitemap_links );
 			return $sitemap_links;
 		}
 

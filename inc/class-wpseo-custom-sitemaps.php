@@ -125,4 +125,3 @@ final class WP_SEO_Custom_Sitemaps {
 		";
 	}
 }
-
